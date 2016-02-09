@@ -4,7 +4,8 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
 (defroutes app-routes
-  (GET "/" [] (ring.util.response/redirect "/index.html"))
+  (GET "/" [] (ring.util.response/content-type
+                     (ring.util.response/resource-response "index.html" {:root "public"}) "text/html"))
   (route/not-found "Not Found"))
 
 (def app
