@@ -7,47 +7,47 @@
             [ring.util.response :refer [response]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
+(defn parseNYTimesSearchResults [[head & tail] parsedResults]
+	(if (not-empty head)
+		
+		(let [elem {:title (:main (:headline head)) :url (:web_url head)}]
+			(parseNYTimesSearchResults tail (conj parsedResults elem))
+		)
+		
+		{:nytimes parsedResults}
+	) 
+)
+
+(defn parseGuardianSearchResults [[head & tail] parsedResults]
+	(if (not-empty head)
+
+		(let [elem {:title (:webTitle head) :url (:webUrl head)}]
+			(parseGuardianSearchResults tail (conj parsedResults elem))
+		)
+
+		{:guardian parsedResults}
+	) 
+)
+
 (defn callNewYorkTimesApi 
 	[searchTerm]
 		(let [resp1 (http/get (str "http://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest&api-key=sample-key&q=" searchTerm))]
 			(def results (:docs (:response (json/read-str (:body @resp1) :key-fn keyword))))
-			(parseNYTimesResult results [])
+			(parseNYTimesSearchResults results [])
 		)
-)
-
-(defn parseNYTimesResult [[head & tail] finalResult]
-	(if (not-empty head)
-		
-		(let [elem {:title (:main (:headline head)) :url (:web_url head)}]
-			(parseNYTimesResult tail (conj finalResult elem))
-		)
-		
-		{:nytimes finalResult}
-	) 
-)
-
-(defn parseGuardianResult [[head & tail] finalResult]
-	(if (not-empty head)
-
-		(let [elem {:title (:webTitle head) :url (:webUrl head)}]
-			(parseGuardianResult tail (conj finalResult elem))
-		)
-
-		{:guardian finalResult}
-	) 
 )
 
 (defn callGuardianApi 
 	[searchTerm]
 		(let [resp1 (http/get (str "http://content.guardianapis.com/search?order-by=newest&api-key=test&q=" searchTerm))]
 			(def results (:results (:response (json/read-str (:body @resp1) :key-fn keyword))))
-			(parseGuardianResult results [])
+			(parseGuardianSearchResults results [])
 		)
 )
 
 (defn callApis [searchTerm]
 	(if (not= searchTerm nil) 
-	 (response (conj [] (callNewYorkTimesApi searchTerm) (callGuardianApi searchTerm)))
+	 (response (conj {} (callNewYorkTimesApi searchTerm) (callGuardianApi searchTerm)))
 	 (str "Query Parameter 'searchTerm' needs to be specified")
 	)
 )
