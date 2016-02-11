@@ -9,7 +9,7 @@
 
 (def NY_TIMES_API "http://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest&api-key=sample-key&q=")
 
-(def GUARDIAN_API "http://content.guardianapis.com/search?order-by=newest&api-key=test&q=")
+(def GUARDIAN_API "http://content.guardianapis.com/search?order-by=relevance&use-date=last-modified&api-key=test&q=")
 
 (defn parseNYTimesSearchResults [[head & tail] parsedResults]
 	(if (not-empty head)
