@@ -7,6 +7,10 @@
             [ring.util.response :refer [response]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]))
 
+(def NY_TIMES_API "http://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest&api-key=sample-key&q=")
+
+(def GUARDIAN_API "http://content.guardianapis.com/search?order-by=newest&api-key=test&q=")
+
 (defn parseNYTimesSearchResults [[head & tail] parsedResults]
 	(if (not-empty head)
 		
@@ -31,7 +35,7 @@
 
 (defn callNewYorkTimesApi 
 	[searchTerm]
-		(let [resp1 (http/get (str "http://api.nytimes.com/svc/search/v2/articlesearch.json?sort=newest&api-key=sample-key&q=" searchTerm))]
+		(let [resp1 (http/get (str NY_TIMES_API searchTerm))]
 			(def results (:docs (:response (json/read-str (:body @resp1) :key-fn keyword))))
 			(parseNYTimesSearchResults results [])
 		)
@@ -39,7 +43,7 @@
 
 (defn callGuardianApi 
 	[searchTerm]
-		(let [resp1 (http/get (str "http://content.guardianapis.com/search?order-by=newest&api-key=test&q=" searchTerm))]
+		(let [resp1 (http/get (str GUARDIAN_API searchTerm))]
 			(def results (:results (:response (json/read-str (:body @resp1) :key-fn keyword))))
 			(parseGuardianSearchResults results [])
 		)
@@ -66,4 +70,3 @@
       (wrap-defaults site-defaults)
   )
 )
-
