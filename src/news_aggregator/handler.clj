@@ -35,7 +35,7 @@
 
 (defn callNewYorkTimesApi 
 	[searchTerm]
-		(let [response (http/get (str NY_TIMES_API searchTerm))]
+		(let [response (http/get (str NY_TIMES_API (ring.util.codec/url-encode searchTerm)))]
 			(def results (:docs (:response (json/read-str (:body @response) :key-fn keyword))))
 			(parseNYTimesSearchResults results [])
 		)
@@ -43,7 +43,7 @@
 
 (defn callGuardianApi 
 	[searchTerm]
-		(let [response (http/get (str GUARDIAN_API searchTerm))]
+		(let [response (http/get (str GUARDIAN_API (ring.util.codec/url-encode searchTerm)))]
 			(def results (:results (:response (json/read-str (:body @response) :key-fn keyword))))
 			(parseGuardianSearchResults results [])
 		)
