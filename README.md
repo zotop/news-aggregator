@@ -1,6 +1,6 @@
 # news-aggregator
 
-FIXME
+Input search term is used to query New York Times and Guardian's API's.
 
 ## Prerequisites
 
@@ -10,10 +10,8 @@ You will need [Leiningen][] 2.0.0 or above installed.
 
 ## Running
 
-To start a web server for the application, run:
+To run the compojure web application locally: 
 
-    lein ring server
+   lein ring server-headless
 
-## License
 
-Copyright © 2016 FIXME
