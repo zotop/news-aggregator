@@ -35,16 +35,16 @@
 
 (defn callNewYorkTimesApi 
 	[searchTerm]
-		(let [resp1 (http/get (str NY_TIMES_API searchTerm))]
-			(def results (:docs (:response (json/read-str (:body @resp1) :key-fn keyword))))
+		(let [response (http/get (str NY_TIMES_API searchTerm))]
+			(def results (:docs (:response (json/read-str (:body @response) :key-fn keyword))))
 			(parseNYTimesSearchResults results [])
 		)
 )
 
 (defn callGuardianApi 
 	[searchTerm]
-		(let [resp1 (http/get (str GUARDIAN_API searchTerm))]
-			(def results (:results (:response (json/read-str (:body @resp1) :key-fn keyword))))
+		(let [response (http/get (str GUARDIAN_API searchTerm))]
+			(def results (:results (:response (json/read-str (:body @response) :key-fn keyword))))
 			(parseGuardianSearchResults results [])
 		)
 )
