@@ -1,21 +1,56 @@
 <html>
   <head>
+
+  	<!-- JS -->
   	<script src="js/jquery-2.2.0.min.js"></script>
+
+  	<!-- CSS -->
+  	<link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+
+    <!-- FONT -->
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
 
     <title>News Aggregator</title>
 
     <script>
+
+    	function createNewsTable(newsSource, newsArticles) {
+    		var table = $("<table/>");
+    		table.append("<thead><tr><th>" + newsSource.toUpperCase() + "</th></tr></thead>");
+    		table.append("<tbody>");
+    		$.each(newsArticles, function(index, newsArticle) {
+    			table.append("<tr><td><a href='" +  newsArticle.url + "'>" + newsArticle.title + "</a></tr></td>");
+    		});
+    		table.append("</tbody></table>");
+    		return table;
+    	}
+
         $(document).ready(function () {
-       		alert("Hello");
+       		$("#goButton").click(function() {
+       			$("#searchResultsArea").empty();
+       			var searchTerm = $("#searchTermInput").val().trim();
+       			$.getJSON("/api?searchTerm=" + searchTerm, function(data){
+       				Object.keys(data).forEach(function(key,index) {
+       					var newsArticles = data[key];
+       					if(newsArticles.length > 0) {
+       						$("#searchResultsArea").append(createNewsTable(key, newsArticles));	
+       					}
+       				});
+       			});
+       		});
         });
     </script>
-    
+
   </head>
   <body>
 
-    <h1>Search news from multiple sources</h1>
-
- 
+    <div class="container">
+    	<h4>News Aggregator</h4>
+    	<input id="searchTermInput" type="text" placeholder="search term"> 
+    	<button id="goButton" class="button-primary">Search News</button>
+    	<div id="searchResultsArea"/>
+   	</div>
 
   </body>
 </html>
