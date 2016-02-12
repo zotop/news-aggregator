@@ -1,6 +1,6 @@
 # news-aggregator
 
-Input search term is used to query New York Times and Guardian's API's.
+Input search term is used to query New York Times and Guardian's API's for the related articles.
 
 ## Prerequisites
 
@@ -14,5 +14,6 @@ To run the compojure web application locally:
 
    lein ring server-headless
 
+## Screenshot
 
 ![News Aggregator](https://raw.githubusercontent.com/zotop/news-aggregator/master/resources/screenshot1.png)
