@@ -15,3 +15,4 @@ To run the compojure web application locally:
    lein ring server-headless
 
 
+![News Aggregator](https://raw.githubusercontent.com/zotop/news-aggregator/master/resources/screenshot1.png)
